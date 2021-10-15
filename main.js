@@ -140,22 +140,22 @@ function createWindow(){
 };
 
 app.whenReady().then(createWindow);
-
+const obj_settings = {
+    lastFilesOpen: [],
+    styles: {
+        body: "default",
+        "#task-bar": "default",
+        textarea: "default",
+        button: "default",
+        ".tabs": "default"
+    }
+};
 switch(process.platform){
     case "linux":
         fs.access(`/home/${process.env.USER}/.script_gui`, (err)=>{
             if(err){
                 fs.mkdirSync(`/home/${process.env.USER}/.script_gui`);
-                fs.writeFileSync(`/home/${process.env.USER}/.script_gui/settings.jsonc`, JSON.stringify({
-                    lastFilesOpen: [],
-                    styles: {
-                        body: "default",
-                        "task-bar": "default",
-                        textarea: "default",
-                        button: "default",
-                        ".tabs": "default"
-                    }
-                }, null, 3), {encoding: "utf-8"})
+                fs.writeFileSync(`/home/${process.env.USER}/.script_gui/settings.jsonc`, JSON.stringify(obj_settings, null, 3), {encoding: "utf-8"})
             }
         })
         setting_path = `/home/${process.env.USER}/.script_gui/settings.jsonc`;
@@ -165,16 +165,7 @@ switch(process.platform){
             if(err){
                 fs.mkdirSync(`${process.env.USERPROFILE}\\.script_gui`);
 
-                fs.writeFileSync(`${process.env.USERPROFILE}\\.script_gui\\settings.jsonc`, JSON.stringify({
-                    lastFilesOpen: [],
-                    styles: {
-                        body: "default",
-                        taskBar: "default",
-                        notepad: "default",
-                        btn: "default",
-                        tabs: "default"
-                    }
-                }, null, 3), {encoding: "utf-8"})
+                fs.writeFileSync(`${process.env.USERPROFILE}\\.script_gui\\settings.jsonc`, JSON.stringify(obj_settings, null, 3), {encoding: "utf-8"})
             }
         })
         setting_path = `${process.env.USERPROFILE}\\.script_gui\\settings.jsonc`;
