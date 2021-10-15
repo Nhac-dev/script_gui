@@ -1,6 +1,6 @@
-require("electron-reload")(__dirname, {
-    electron: require(`${__dirname}/node_modules/electron`)
-});
+// require("electron-reload")(__dirname, {
+//     electron: require(`${__dirname}/node_modules/electron`)
+// });
 const {app, BrowserWindow, ipcMain:api, dialog, ipcMain} = require("electron");
 const builder = require("electron-builder");
 const Platform = builder.Platform;

@@ -1,3 +1,5 @@
+const cmd = require("child_process"); 
+const path = require("path");
 var server_on = false;
 
 const open_btn = GetElm("#open-file"),
@@ -85,7 +87,6 @@ window.addEventListener("keydown", (e)=>{
             if(item.tab.dir == res){
                 exist = true;
             }
-            console.log(item);
         }
         if(!exist){
             const text = new AreaText(true, "");
@@ -141,7 +142,9 @@ function SaveFile(){
             }
             break
         }else if(item.active && item.tab.header.includes("*")){
-            api.send("save_file",{val: item.a_text.text_area.GetVal(), dir: item.tab.dir}, i);      
+            api.send("save_file",{val: item.a_text.text_area.GetVal(), dir: item.tab.dir}, i);
+            item.tab.header = item.tab.header.replace("*", "");
+            item.tab.header_text.SetTXT(item.tab.header.replace("*", ""));
         }
     }
 };
@@ -179,8 +182,23 @@ function OnServer(){
 function RunScript() {
     for(let item of all_tabs){
         if(item.active == true){
-            if(item.header.includes(".js") || item.header.includes(".py") || item.header.includes(".go")){
-                api.send("run_script", item.tab.dir)
+            if(path.extname(item.header) == ".js" ){
+                new Promise(()=>{
+                    cmd.exec(`node ${item.tab.dir}`, (err, res, sin, serr)=>{
+                        const res_win = window.open("", "", "width=500,height=500");
+                        const ns_res = new ns_Dom_Uni_Cls(res_win.document.body);
+
+                        ns_res.NOS({
+                            backgroundColor: "#282A36",
+                            color: "#bd93f9",
+                        })
+                        if(err){
+                            res_win.document.body.innerHTML = err;
+                        }else{
+                            res_win.document.body.innerHTML = res;
+                        }
+                    });
+                });
             }
             
             else alert(lang == "pt"? "Não foi possível rodar, arquivo invalido":
