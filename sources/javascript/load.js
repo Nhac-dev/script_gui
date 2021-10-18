@@ -7,6 +7,18 @@ api.on("load_default", (e, res)=>{
             api.send("save_setting", ToJSON(object));
         }
     })
+    api.on("new-file-data", (e,  dir, data, err)=>{
+        if(!err || !(object.lastFilesOpen.includes(dir))){
+            object.lastFilesOpen.push(dir);
+            api.send("save_setting", ToJSON(object));
+        }
+    })
+    api.on("save_file_new_result", (e, res)=>{
+        if((object.lastFilesOpen.includes(res.path))){
+            object.lastFilesOpen.push(res.path);
+            api.send("save_setting", ToJSON(object));
+        }
+    })
     api.on("close_file_f", (e, dir)=>{
         let i = 0;
         for(let item of object.lastFilesOpen){
@@ -20,7 +32,7 @@ api.on("load_default", (e, res)=>{
         for(let data of datas){
             let create = false;
             all_tabs.map((val, i)=>{
-                if(val.header == data.dir.split("/")[data.dir.split("/").length - 1] && val.tab.dir == dir){
+                if(val.header == data.dir.split("/")[data.dir.split("/").length - 1] && val.tab.dir == data.dir){
                     create = true;
                 }
             })

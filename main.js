@@ -16,10 +16,11 @@ function createWindow(){
         autoHideMenuBar: true,
         title: "ScriptGUI",
         webPreferences: {
-            devTools: true,
+            devTools: false,
             nodeIntegration: true,
             contextIsolation: false,
         },
+        icon: "/sources/img/icon.svg",
     });
     win.loadFile(path.join(`${__dirname}/sources/index.html`));
 
